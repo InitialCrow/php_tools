@@ -14,20 +14,29 @@ class DataExporter
 		$this->mod = $mod;
 		$this->src = $src.".".$this->mod;
 	}
-	public function export($delimiter = ";"){ // open and write csv
+	public function export($exportWithFile=true, $delimiter = ";"){ // open and write csv
 		
 		if($this->mod == "csv"){
 
 			$data = $this->data;
 			$raws = $data["raws"];
 			$headers = $data["cols"];
-			$fp = fopen($this->src, 'w');
-			
-			fputcsv($fp, $headers, $delimiter);
+			if($exportWithFile == true){
 
-			fputcsv($fp, $raws, $delimiter);
+				$fp = fopen($this->src, 'w');
 				
-			fclose($fp);
+				fputcsv($fp, $headers, $delimiter);
+
+				fputcsv($fp, $raws, $delimiter);
+					
+				fclose($fp);
+			}
+			else{
+				
+				echo implode($delimiter, $headers).$delimiter."\r\n";
+				echo trim(implode($delimiter, $raws),"\n");
+				return $data;
+			}
 
 		}
 
